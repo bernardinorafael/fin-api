@@ -106,5 +106,36 @@ app.get("/statement/date", checkIsValidAccount, (request, response) => {
     return response.json(statement)
 }) //!: request de busca por data
 
+app.put("/account", checkIsValidAccount, (request, response) => {
+    const { name } = request.body
+    const { customer } = request
+
+    customer.name = name
+
+    return response.status(201).json({ message: "Nome alterado com sucesso!" }).send()
+}) //!: request de alteração de nome da conta
+
+app.get("/account", checkIsValidAccount, (request, response) => {
+    const { customer } = request
+
+    return response.json(customer)
+}) //! request para visualizar as contas criadas
+
+app.delete("/account", checkIsValidAccount, (request, response) => {
+    const { customer } = request
+
+    customers.splice(customer, 1)
+
+    return response.status(200).json(customers)
+}) //! request para deletar conta
+
+app.get("/balance", checkIsValidAccount, (request, response) => {
+    const { customer } = request
+
+    const balance = getBalanceAccount(customer.statement)
+
+    return response.status(201).json(balance)
+}) //! request para pegar extrato
+
 app.listen(4400)
 console.log("Servidor operando!❣️")
